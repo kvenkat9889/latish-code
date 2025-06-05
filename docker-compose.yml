@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: latish_onboarding
+    ports:
+      - "5434:5432"  # Expose PostgreSQL on port 5434
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Persistent volume for PostgreSQL
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro  # Initialize DB with init.sql
+    restart: unless-stopped
+    networks:
+      - onboarding-net  # Use a custom network for isolation
+
+  backend:
+    build: ./backend
+    container_name: backend-api-v2
+    ports:
+      - "3000:3000"  # Expose backend on port 3000
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: admin123
+      DB_NAME: latish_onboarding
+    depends_on:
+      - postgres  # Ensure backend starts after PostgreSQL is ready
+    restart: unless-stopped
+    networks:
+      - onboarding-net  # Connect to the same network as PostgreSQL
+
+  frontend:
+    build: ./Frontend
+    container_name: employee-container
+    ports:
+      - "8118:80"  # Expose frontend on port 8118
+    depends_on:
+      - backend  # Ensure frontend starts after backend is ready
+    restart: unless-stopped
+    networks:
+      - onboarding-net  # Connect to the same network as backend
+
+  hr-portal:
+    build: ./HR-portal
+    container_name: hr-container
+    ports:
+      - "8119:80"  # Expose HR portal on port 8119
+    depends_on:
+      - backend  # Ensure HR portal starts after backend is ready
+    restart: unless-stopped
+    networks:
+      - onboarding-net  # Connect to the same network as backend
+
+volumes:
+  postgres-data:  # Persistent volume for PostgreSQL data
+
+networks:
+  onboarding-net:  # Custom network for isolation of services
+    driver: bridge
+
