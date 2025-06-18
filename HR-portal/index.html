@@ -834,7 +834,7 @@
     
             async function fetchEmployees() {
                 try {
-                    const response = await fetch('http://98.80.67.100:3000/api/employees');
+                    const response = await fetch('http://3.85.61.23:3000/api/employees');
                     if (!response.ok) throw new Error('Failed to fetch employees');
                     return await response.json();
                 } catch (error) {
@@ -846,7 +846,7 @@
     
             async function updateEmployeeStatus(employeeId, status) {
                 try {
-                    const response = await fetch(`http://98.80.67.100:3000/api/employees/${employeeId}/status`, {
+                    const response = await fetch(`http://3.85.61.23:3000/api/employees/${employeeId}/status`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ status })
@@ -862,7 +862,7 @@
     
             async function deleteSelectedEmployees(employeeIds) {
                 try {
-                    const response = await fetch('http://98.80.67.100:3000/api/employees/delete-selected', {
+                    const response = await fetch('http://3.85.61.23:3000/api/employees/delete-selected', {
                         method: 'DELETE',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ employeeIds })
@@ -892,7 +892,7 @@
                 }
     
                 const fileName = fileUrl.split('/').pop() || 'Document';
-                const downloadUrl = `http://98.80.67.100:3000/api/download/${encodeURIComponent(fileName)}`;
+                const downloadUrl = `http://3.85.61.23:3000/api/download/${encodeURIComponent(fileName)}`;
     
                 return `
                     <p class="file-name" data-fullname="${fileName}">${fileName}</p>

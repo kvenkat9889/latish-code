@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: latish_onboarding
     ports:
-      - "5434:5432"  # Expose PostgreSQL on port 5434
+      - "5000:5432"  # Expose PostgreSQL on port 5434
     volumes:
       - postgres-data:/var/lib/postgresql/data  # Persistent volume for PostgreSQL
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro  # Initialize DB with init.sql
@@ -38,7 +38,7 @@ services:
     build: ./Frontend
     container_name: employee-container
     ports:
-      - "8118:80"  # Expose frontend on port 8118
+      - "7001:80"  # Expose frontend on port 8118
     depends_on:
       - backend  # Ensure frontend starts after backend is ready
     restart: unless-stopped
@@ -49,7 +49,7 @@ services:
     build: ./HR-portal
     container_name: hr-container
     ports:
-      - "8119:80"  # Expose HR portal on port 8119
+      - "7002:80"  # Expose HR portal on port 8119
     depends_on:
       - backend  # Ensure HR portal starts after backend is ready
     restart: unless-stopped
